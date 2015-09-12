@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    JBoss, Home of Professional Open Source
+    Copyright 2013, Red Hat, Inc. and/or its affiliates, and individual
+    contributors by the @authors tag. See the copyright.txt in the
+    distribution for a full listing of individual contributors.
+
+    Licensed under the Apache License, Version 2.0 (the "License");
+    you may not use this file except in compliance with the License.
+    You may obtain a copy of the License at
+    http://www.apache.org/licenses/LICENSE-2.0
+    Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the License for the specific language governing permissions and
+    limitations under the License.
+-->
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	template="/WEB-INF/templates/default.xhtml"
+	xmlns:p="http://primefaces.org/ui">
+
+	<ui:define name="content">
+		<h1>Lista de senhas geradas</h1>
+
+		<h:form id="reg">
+			<div id="generated_passwords">
+				<div id="normal_passwords">
+					<h2>Senhas do tipo Normal</h2>
+					<h:panelGroup id="normal_panel">
+						<h:panelGroup rendered="#{empty passwordMB.normalPasswordSet}">
+		 					<em>Nenhuma senha gerada</em>
+						</h:panelGroup>
+						<p:dataTable id="normal_data" paginator="true" rows="5" var="normal" value="#{passwordMB.normalPasswordSet}"
+							rendered="#{not empty passwordMB.normalPasswordSet}" styleClass="simpletablestyle"
+							paginatorTemplate="{FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}"
+	                 		>
+							<p:column headerText="Senha">
+								<h:outputText value="#{normal.code}"/>
+							</p:column>
+							<p:column headerText="Status">
+								<h:outputText value="Chamada" rendered="#{normal.called}"/>
+								<h:outputText value="Na fila" rendered="#{not normal.called}"/>
+							</p:column>
+						</p:dataTable>
+						</h:panelGroup>
+					<p:poll interval="3" update="normal_panel" />
+				</div>
+				<div id="preferential_passwords">
+					<h2>Senhas do tipo Preferencial</h2>
+					<h:panelGroup id="preferential_panel">
+						<h:panelGroup rendered="#{empty passwordMB.preferentialPasswordSet}">
+							<em>Nenhuma senha gerada</em>
+						</h:panelGroup>
+						<p:dataTable id="preferential_data" paginator="true" rows="5" var="preferential" value="#{passwordMB.preferentialPasswordSet}"
+							rendered="#{not empty passwordMB.preferentialPasswordSet}" styleClass="simpletablestyle"
+							paginatorTemplate="{FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}"
+							>
+							<p:column headerText="Senha">
+		               			<h:outputText value="#{preferential.code}"/>
+		           			</p:column>
+							<p:column headerText="Status">
+								<h:outputText value="Chamada" rendered="#{preferential.called}"/>
+								<h:outputText value="Na fila" rendered="#{not preferential.called}"/>
+							</p:column>
+						</p:dataTable>
+						</h:panelGroup>
+					<p:poll interval="3" update="preferential_panel" />
+				</div>
+			</div>
+		</h:form>
+	</ui:define>
+</ui:composition>
